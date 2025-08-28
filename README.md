@@ -1,4 +1,4 @@
-🚀 To-Do List with AI Agent — Foyr AI Hackathon 2025
+**To-Do List with AI Agent**
 Python| 💻 Repo
 
 🎯 Project Overview
