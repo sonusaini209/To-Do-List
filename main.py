@@ -8,9 +8,11 @@ import json
 import re
 from typing import List, Optional
 from datetime import datetime
+import os
+
+
 app = FastAPI()
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Allow frontend requests
 app.add_middleware(
     CORSMiddleware,
@@ -18,23 +20,35 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 # In-memory task list and conversation history
 tasks = []
 task_id = 0
 conversation_history = []
+
+
 class AgentRequest(BaseModel):
     message: str
+
 
 class AgentResponse(BaseModel):
     response: str
     action: Optional[str] = None
     task_id: Optional[int] = None
+
+
 @app.get("/")
 def read_root():
-    return FileResponse('static/index.html')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    index_path = os.path.join(current_dir, "index.html")
+    return FileResponse(index_path)
+
+
 @app.get("/tasks")
 def get_tasks():
     return tasks
+
+
 @app.post("/tasks")
 def add_task(title: str):
     global task_id
@@ -42,6 +56,8 @@ def add_task(title: str):
     task = {"id": task_id, "title": title, "done": False}
     tasks.append(task)
     return task
+
+
 @app.patch("/tasks/{task_id}")
 def mark_done(task_id: int):
     for task in tasks:
@@ -49,23 +65,23 @@ def mark_done(task_id: int):
             task["done"] = True
             return task
     return {"error": "Task not found"}
+
+
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):
     global tasks
     tasks = [t for t in tasks if t["id"] != task_id]
     return {"message": "Deleted"}
+
+
 @app.post("/agent", response_model=AgentResponse)
 def process_agent_command(request: AgentRequest):
-    """Enhanced AI agent endpoint with OpenAI integration"""
     global tasks, task_id, conversation_history
 
-    # Add to conversation history
     conversation_history.append({"role": "user", "message": request.message, "timestamp": datetime.now().isoformat()})
 
-    # Get current tasks context
     tasks_context = json.dumps(tasks, indent=2) if tasks else "No tasks currently exist."
 
-    # Enhanced system prompt for better AI understanding
     system_prompt = f"""You are an intelligent task manager agent. You can help users manage their to-do list through natural language.
 Current tasks: {tasks_context}
 Available actions:
@@ -82,31 +98,21 @@ Respond with JSON in this format:
     "response": "Natural language response to user"
 }}
 If the user's request is unclear or you need more information, set action to "CLARIFY" and ask for clarification.
-Examples:
-- "add buy milk" → {{"action": "ADD_TASK", "parameters": {{"title": "buy milk"}}, "response": "Added task: buy milk"}}
-- "mark the first task done" → {{"action": "COMPLETE_TASK", "parameters": {{"task_id": 1}}, "response": "Marked task as completed"}}
-- "delete all grocery tasks" → {{"action": "SEARCH_DELETE", "parameters": {{"query": "grocery"}}, "response": "Deleted grocery-related tasks"}}
 """
     try:
-        # Use OpenAI API (you'll need to set OPENAI_API_KEY in secrets)
         response = process_with_openai(system_prompt, request.message)
-
-        # Execute the action
         result = execute_agent_action(response)
 
-        # Add to conversation history
         conversation_history.append({"role": "assistant", "message": result["response"], "timestamp": datetime.now().isoformat()})
 
         return AgentResponse(**result)
 
-    except Exception as e:
-        # Fallback to pattern matching if OpenAI fails
+    except Exception:
         result = fallback_pattern_matching(request.message)
         return AgentResponse(**result)
-def process_with_openai(system_prompt: str, user_message: str) -> dict:
-    """Process user message with OpenAI API"""
-    import os
 
+
+def process_with_openai(system_prompt: str, user_message: str) -> dict:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise Exception("OpenAI API key not configured")
@@ -125,25 +131,23 @@ def process_with_openai(system_prompt: str, user_message: str) -> dict:
 
     try:
         content = response.choices[0].message.content.strip()
-        # Extract JSON from response
         if content.startswith("```json"):
             content = content.replace("```json", "").replace("```", "").strip()
 
         return json.loads(content)
     except json.JSONDecodeError:
-        # If JSON parsing fails, return a clarification request
         return {
             "action": "CLARIFY",
             "parameters": {},
             "response": "I'm having trouble understanding your request. Could you please rephrase it?"
         }
+
+
 def fallback_pattern_matching(message: str) -> dict:
-    """Fallback pattern matching when OpenAI is not available"""
     global tasks, task_id
 
     message = message.lower().strip()
 
-    # Add task patterns
     add_patterns = [
         r'^add\s+(.+)$',
         r'^create\s+task\s+(.+)$',
@@ -164,12 +168,10 @@ def fallback_pattern_matching(message: str) -> dict:
             return {
                 "action": "ADD_TASK",
                 "parameters": {"title": title},
-                "response": f"✅ Added task: {title}"
+                "response": f"Added task: {title}"
             }
 
-    # Complete task patterns
     if "mark" in message and ("done" in message or "complete" in message):
-        # Try to find task by number or description
         task_match = re.search(r'task\s+(\d+)', message)
         if task_match:
             tid = int(task_match.group(1))
@@ -179,20 +181,18 @@ def fallback_pattern_matching(message: str) -> dict:
                     return {
                         "action": "COMPLETE_TASK",
                         "parameters": {"task_id": tid},
-                        "response": f"✅ Marked task '{task['title']}' as completed"
+                        "response": f"Marked task '{task['title']}' as completed"
                     }
 
-        # Mark first incomplete task
         for task in tasks:
             if not task["done"]:
                 task["done"] = True
                 return {
                     "action": "COMPLETE_TASK",
                     "parameters": {"task_id": task["id"]},
-                    "response": f"✅ Marked task '{task['title']}' as completed"
+                    "response": f"Marked task '{task['title']}' as completed"
                 }
 
-    # Delete patterns
     if "delete" in message or "remove" in message:
         if "all" in message and "done" in message:
             deleted_count = len([t for t in tasks if t["done"]])
@@ -200,36 +200,36 @@ def fallback_pattern_matching(message: str) -> dict:
             return {
                 "action": "CLEAR_COMPLETED",
                 "parameters": {},
-                "response": f"🗑️ Deleted {deleted_count} completed tasks"
+                "response": f"Deleted {deleted_count} completed tasks"
             }
 
-    # List tasks
     if "list" in message or "show" in message or "what" in message:
         if not tasks:
             return {
                 "action": "LIST_TASKS",
                 "parameters": {},
-                "response": "📝 You have no tasks yet!"
+                "response": "You have no tasks yet!"
             }
 
         task_list = []
         for task in tasks:
-            status = "✅" if task["done"] else "📋"
+            status = "[Done]" if task["done"] else "[Pending]"
             task_list.append(f"{status} {task['title']}")
 
         return {
             "action": "LIST_TASKS", 
             "parameters": {},
-            "response": f"📝 Your tasks:\n" + "\n".join(task_list)
+            "response": "Your tasks:\n" + "\n".join(task_list)
         }
 
     return {
         "action": "CLARIFY",
         "parameters": {},
-        "response": "🤔 I didn't understand that. Try: 'add [task]', 'mark task done', 'list tasks', or 'delete completed'"
+        "response": "I didn't understand that. Try: 'add [task]', 'mark task done', 'list tasks', or 'delete completed'"
     }
+
+
 def execute_agent_action(action_data: dict) -> dict:
-    """Execute the action determined by the AI"""
     global tasks, task_id
 
     action = action_data.get("action", "")
@@ -263,8 +263,8 @@ def execute_agent_action(action_data: dict) -> dict:
         return {"action": action, "response": response}
 
     return {"action": action, "response": response}
+
+
 @app.get("/conversation-history")
 def get_conversation_history():
-    """Get the conversation history for context"""
-    return conversation_history[-10:]  # Return last 10 interactions
-
+    return conversation_history[-10:]
