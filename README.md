@@ -47,9 +47,7 @@ Users can manage tasks by:
 | Dual Interaction Modes  | Seamless parity between manual UI & AI agent commands     |
 | Lightweight Backend     | Python + FastAPI with minimal dependencies                |
 
----
 
-## 🚀 Usage
 
 ### Live Demo
 
