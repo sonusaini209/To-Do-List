@@ -5,7 +5,7 @@
     <img alt="Live Demo" src="https://img.shields.io/badge/Live-Demo-blue" />
   </a>
   &nbsp;
-  <a href="https://github.com/yourusername/yourrepo">
+  <a href="https://github.com//sonusaini209/To-Do-List">
     <img alt="GitHub Repo" src="https://img.shields.io/badge/GitHub-Repository-black" />
   </a>
   &nbsp;
