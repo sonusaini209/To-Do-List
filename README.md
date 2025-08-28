@@ -1,196 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List with AI Agent</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background: #4f46e5;
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-        header p {
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
-        .container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #4f46e5;
-            margin-top: 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-        }
-        th {
-            background-color: #4f46e5;
-            color: white;
-        }
-        pre {
-            background: #f0f0f0;
-            padding: 1rem;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
-        a {
-            color: #4f46e5;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .command-section pre {
-            background: #e0e7ff;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>📝 To-Do List with AI Agent</h1>
-        <p>Powerful task management with AI-powered natural language commands. Built for Foyr AI Hackathon 2025.</p>
-    </header>
+<h1 align="center">To-Do List with AI Agent — Foyr AI Hackathon 2025</h1>
 
-    <div class="container">
-        <section>
-            <h2>🎯 Project Overview</h2>
-            <p>This app lets you manage tasks in two ways:</p>
-            <ul>
-                <li><strong>Manual Task Control:</strong> Intuitive UI for adding, completing, and deleting tasks.</li>
-                <li><strong>AI Control:</strong> Regex-based natural language fallback agent to understand commands.</li>
-            </ul>
-            <p>All functionalities are accessible in both modes for a seamless experience.</p>
-        </section>
+<p align="center">
+  <a href="https://to-do-list-7e75.onrender.com/">
+    <img alt="Live Demo" src="https://img.shields.io/badge/Live-Demo-blue" />
+  </a>
+  &nbsp;
+  <a href="https://github.com/yourusername/yourrepo">
+    <img alt="GitHub Repo" src="https://img.shields.io/badge/GitHub-Repository-black" />
+  </a>
+  &nbsp;
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-blue" />
+  &nbsp;
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.70+-green" />
+  &nbsp;
+  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-yellow" />
+</p>
 
-        <section>
-            <h2>✨ Features</h2>
-            <table>
-                <tr>
-                    <th>Feature</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>✅ Task Management</td>
-                    <td>Add, complete, delete, and list tasks manually or via AI commands</td>
-                </tr>
-                <tr>
-                    <td>🤖 Simple AI Agent</td>
-                    <td>Understands commands via regex-based natural language fallback</td>
-                </tr>
-                <tr>
-                    <td>🔁 Conversation History</td>
-                    <td>Tracks the latest 10 user-agent interactions</td>
-                </tr>
-                <tr>
-                    <td>🎨 Dual-Mode Parity</td>
-                    <td>Same functionalities accessible via UI or AI chat</td>
-                </tr>
-                <tr>
-                    <td>🚀 Lightweight & Self-Hosted</td>
-                    <td>No external AI API; runs fully with minimal dependencies</td>
-                </tr>
-            </table>
-        </section>
+---
 
-        <section>
-            <h2>💬 Supported Commands</h2>
-            <div class="command-section">
-                <h3>Add Task</h3>
-                <pre>
-add buy groceries
-create task read book
-                </pre>
+<p align="center">
+  <em>A lightweight to-do list with AI-powered agent interface using fallback pattern matching.<br />
+  Dual-mode interaction with full parity: manual UI and natural language commands.</em>
+</p>
 
-                <h3>Complete Task</h3>
-                <pre>
-mark task 2 done
-complete task 1
-                </pre>
+---
 
-                <h3>Delete Completed Tasks</h3>
-                <pre>
-delete all done tasks
-                </pre>
+## ✨ Overview
 
-                <h3>List Tasks</h3>
-                <pre>
-list my tasks
-show tasks
-                </pre>
-            </div>
-        </section>
+This project was developed for the **Foyr AI Hackathon 2025**, aiming to build **agentic design intelligence** tools that blend a traditional UI with AI agent control.
 
-        <section>
-            <h2>🚀 Setup & Run Locally</h2>
-            <pre>
-# Clone the repository
+Users can manage tasks by:
+
+- Manual interaction through a simple UI  
+- Natural language commands sent to an AI agent powered by fallback regex matching (no external LLMs required)  
+- Viewing conversation history to maintain context
+
+---
+
+## 🛠️ Features
+
+| Feature                 | Description                                              |
+|-------------------------|----------------------------------------------------------|
+| Task Management         | Add, complete, delete, and list tasks both manually and via AI commands |
+| AI Agent Logic          | Lightweight regex-based natural language understanding    |
+| Conversation History    | Tracks last 10 user-agent messages for context            |
+| Dual Interaction Modes  | Seamless parity between manual UI & AI agent commands     |
+| Lightweight Backend     | Python + FastAPI with minimal dependencies                |
+
+---
+
+## 🚀 Usage
+
+### Live Demo
+
+[https://to-do-list-7e75.onrender.com/](https://to-do-list-7e75.onrender.com/)
+
+### Supported Commands Examples
+
+- `add buy groceries`  
+- `mark task 1 done`  
+- `delete all done tasks`  
+- `list tasks`
+
+All commands are also available via manual UI controls.
+
+---
+
+## 💻 Local Setup
+
 git clone https://github.com/yourusername/yourrepo.git
 cd yourrepo
-
-# Create a virtual environment
 python -m venv venv
-
-# Activate the environment
-# macOS/Linux:
-source venv/bin/activate
-# Windows:
-venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-
-# Run the FastAPI server
 uvicorn main:app --reload
-            </pre>
-            <p>Open your browser at <a href="http://localhost:8000">http://localhost:8000</a> to start using the app.</p>
-        </section>
 
-        <section>
-            <h2>🌐 Live Demo</h2>
-            <p>Try it live: <a href="#">Click to Open</a></p>
-        </section>
-    </div>
+text
 
-    <footer>
-        &copy; 2025 Foyr AI Hackathon | To-Do List with AI Agent
-    </footer>
-</body>
-</html>
+Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+---
+
+## 📂 Project Structure
+
+yourrepo/
+├── main.py # Backend API & AI agent logic
+├── index.html # Frontend UI served at '/'
+├── requirements.txt # Python dependencies
+├── render.yaml # Render deployment config (optional)
+└── README.md # This file
+
+text
+
+---
+
+## 🔮 Future Improvements
+
+- Integrate full LLM support (OpenAI, Hugging Face, LangChain) for advanced conversational AI  
+- Add voice input/output with Whisper, Web Speech API, or Azure Speech Services  
+- Persist tasks and chat history with MongoDB or vector databases (Weaviate, Pinecone)  
+- Enhance UI using React, Vue, or similar frameworks  
+- Develop clean prompt chains with contextual memory for better user experience
+
+---
+
+## 🙌 Acknowledgments
+
+Special thanks to the **Foyr AI** team for the inspiring hackathon opportunity to explore agentic interfaces and AI-native software design.
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to check [issues page](https://github.com/yourusername/yourrepo/issues) to contribute.
+
+---
+
+## 📄 License
+
+Released under the [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+*This README was crafted with 💙 for the Foyr AI Hackathon 2025.*
+
+---
+
+<p align="center">
+  <a href="https://twitter.com/yourTwitterHandle">Follow me on Twitter</a> &nbsp;|&nbsp;
+  <a href="https://github.com/yourusername">GitHub Profile</a>
+</p>
