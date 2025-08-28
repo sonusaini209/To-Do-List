@@ -9,13 +9,18 @@
     <img alt="GitHub Repo" src="https://img.shields.io/badge/GitHub-Repository-black" />
   </a>
   &nbsp;
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-blue" />
+  <a href="https://www.python.org/">
+    <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-blue" />
+  </a>
   &nbsp;
-  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.70+-green" />
+  <a href="https://fastapi.tiangolo.com/">
+    <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.70+-green" />
+  </a>
   &nbsp;
-  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-yellow" />
+  <a href="https://opensource.org/licenses/MIT">
+    <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-yellow" />
+  </a>
 </p>
-
 ---
 
 <p align="center">
