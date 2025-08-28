@@ -3,14 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-import json
-import re,os
-from typing import Optional
+import re, os
+from typing import Optional, List
 from datetime import datetime
 
 app = FastAPI()
-
-
 
 # Allow frontend requests from any origin (adjust in production)
 app.add_middleware(
@@ -24,6 +21,11 @@ app.add_middleware(
 tasks = []
 task_id = 0
 conversation_history = []
+
+class Task(BaseModel):
+    id: int
+    title: str
+    done: bool = False
 
 class AgentRequest(BaseModel):
     message: str
@@ -39,19 +41,19 @@ def read_root():
     index_path = os.path.join(current_dir, "index.html")
     return FileResponse(index_path)
 
-@app.get("/tasks")
+@app.get("/tasks", response_model=List[Task])
 def get_tasks():
     return tasks
 
-@app.post("/tasks")
+@app.post("/tasks", response_model=Task)
 def add_task(title: str):
     global task_id
     task_id += 1
-    task = {"id": task_id, "title": title, "done": False}
-    tasks.append(task)
+    task = Task(id=task_id, title=title, done=False)
+    tasks.append(task.dict())
     return task
 
-@app.patch("/tasks/{task_id}")
+@app.patch("/tasks/{task_id}", response_model=Task)
 def mark_done(task_id: int):
     for task in tasks:
         if task["id"] == task_id:
@@ -70,26 +72,25 @@ def delete_task(task_id: int):
 
 @app.post("/agent", response_model=AgentResponse)
 def process_agent_command(request: AgentRequest):
-    """AI agent endpoint using only fallback pattern matching"""
-    global tasks, task_id, conversation_history
+    """AI agent endpoint using fallback pattern matching"""
+    global conversation_history
 
-    # Append user message to conversation history
+    # Append user message
     conversation_history.append({"role": "user", "message": request.message, "timestamp": datetime.now().isoformat()})
 
-    # Process message using fallback pattern matching
+    # Process message
     result = fallback_pattern_matching(request.message)
 
-    # Append agent response to conversation history
+    # Append agent response
     conversation_history.append({"role": "assistant", "message": result["response"], "timestamp": datetime.now().isoformat()})
 
     return AgentResponse(**result)
 
 def fallback_pattern_matching(message: str) -> dict:
     global tasks, task_id
+    msg = message.lower().strip()
 
-    message = message.lower().strip()
-
-    # Patterns to recognize add task commands
+    # Add task
     add_patterns = [
         r'^add\s+(.+)$',
         r'^create\s+task\s+(.+)$',
@@ -101,7 +102,7 @@ def fallback_pattern_matching(message: str) -> dict:
     ]
 
     for pattern in add_patterns:
-        match = re.search(pattern, message)
+        match = re.search(pattern, msg)
         if match:
             title = match.group(1).strip()
             task_id += 1
@@ -109,14 +110,13 @@ def fallback_pattern_matching(message: str) -> dict:
             tasks.append(task)
             return {
                 "action": "ADD_TASK",
-                "parameters": {"title": title},
-                "response": f"✅ Added task: {title}",
+                "response": f"Added task: {title}",
                 "task_id": task_id
             }
 
-    # Complete task patterns
-    if "mark" in message and ("done" in message or "complete" in message):
-        task_match = re.search(r'task\s+(\d+)', message)
+    # Complete task
+    if "mark" in msg and ("done" in msg or "complete" in msg):
+        task_match = re.search(r'task\s+(\d+)', msg)
         if task_match:
             tid = int(task_match.group(1))
             for task in tasks:
@@ -124,58 +124,43 @@ def fallback_pattern_matching(message: str) -> dict:
                     task["done"] = True
                     return {
                         "action": "COMPLETE_TASK",
-                        "parameters": {"task_id": tid},
-                        "response": f"✅ Marked task '{task['title']}' as completed",
+                        "response": f"Marked task '{task['title']}' as completed",
                         "task_id": tid
                     }
-        # If no task number specified, mark first incomplete task
+        # No ID -> mark first incomplete
         for task in tasks:
             if not task["done"]:
                 task["done"] = True
                 return {
                     "action": "COMPLETE_TASK",
-                    "parameters": {"task_id": task["id"]},
-                    "response": f"✅ Marked task '{task['title']}' as completed",
+                    "response": f"Marked task '{task['title']}' as completed",
                     "task_id": task["id"]
                 }
 
     # Delete completed tasks
-    if ("delete" in message or "remove" in message) and ("all" in message and "done" in message):
+    if ("delete" in msg or "remove" in msg) and ("all" in msg and "done" in msg):
         deleted_count = len([t for t in tasks if t["done"]])
         tasks[:] = [t for t in tasks if not t["done"]]
         return {
             "action": "CLEAR_COMPLETED",
-            "parameters": {},
-            "response": f"🗑️ Deleted {deleted_count} completed tasks"
+            "response": f"Deleted {deleted_count} completed tasks"
         }
 
     # List tasks
-    if any(word in message for word in ["list", "show", "what"]):
+    if any(word in msg for word in ["list", "show", "what"]):
         if not tasks:
-            return {
-                "action": "LIST_TASKS",
-                "parameters": {},
-                "response": "📝 You have no tasks yet!"
-            }
-
-        task_list = []
-        for task in tasks:
-            status = "✅" if task["done"] else "📋"
-            task_list.append(f"{status} {task['title']}")
-
+            return {"action": "LIST_TASKS", "response": "You have no tasks yet!"}
+        task_list = [f"{'[done]' if t['done'] else '[pending]'} {t['id']}: {t['title']}" for t in tasks]
         return {
             "action": "LIST_TASKS",
-            "parameters": {},
-            "response": "📝 Your tasks:\n" + "\n".join(task_list)
+            "response": "Your tasks:\n" + "\n".join(task_list)
         }
 
-    # If no command recognized
+    # Fallback
     return {
         "action": "CLARIFY",
-        "parameters": {},
-        "response": "🤔 I didn't understand that. Try: 'add [task]', 'mark task done', 'list tasks', or 'delete completed'"
+        "response": "I didn't understand that. Try: 'add [task]', 'mark task done', 'list tasks', or 'delete completed'"
     }
-
 
 @app.get("/conversation-history")
 def get_conversation_history():
