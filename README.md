@@ -74,11 +74,9 @@ uvicorn main:app --reload
 
 text
 
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+Open [http://localhost:8000](http://localhost:8000) in your browser
 
 
-
--
 
 ## 📄 License
 
