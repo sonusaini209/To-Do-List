@@ -4,14 +4,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import json
-import re
+import re,os
 from typing import Optional
 from datetime import datetime
 
 app = FastAPI()
 
-# Mount static files to serve frontend
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 # Allow frontend requests from any origin (adjust in production)
 app.add_middleware(
@@ -36,7 +35,9 @@ class AgentResponse(BaseModel):
 
 @app.get("/")
 def read_root():
-    return FileResponse('static/index.html')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    index_path = os.path.join(current_dir, "index.html")
+    return FileResponse(index_path)
 
 @app.get("/tasks")
 def get_tasks():
@@ -180,4 +181,5 @@ def fallback_pattern_matching(message: str) -> dict:
 def get_conversation_history():
     """Get the last 10 conversation interactions"""
     return conversation_history[-10:]
+
 
