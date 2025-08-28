@@ -1,32 +1,34 @@
-📝 To-Do List with AI Agent
+📝 TO-DO LIST WITH AI AGENT
 
 
 
 
 
 
-A to-do list manager enhanced with an AI-powered agent that processes natural language commands via fallback pattern matching — no external AI API needed.
+🎯 PROJECT OVERVIEW
 
-Built for the Foyr AI Hackathon 2025, this app supports:
+A powerful To-Do List Manager enhanced with an AI-powered agent that processes natural language commands via fallback pattern matching—no external AI API needed.
 
-Manual task control via an intuitive UI
+Built for Foyr AI Hackathon 2025, the app offers:
 
-Intelligent control via a natural language AI agent
+Manual Task Control via intuitive UI
 
-All actions are fully accessible in both modes for a seamless user experience.
+Intelligent AI Control via natural language commands
 
-✨ Features
+✅ All actions are accessible in both modes, giving a seamless user experience.
+
+✨ FEATURES
 Feature	Description
 ✅ Task Management	Add, complete, delete, and list tasks manually or via AI commands
 🤖 Simple AI Agent	Understands commands via regex-based natural language fallback
-🔁 Conversation History	Tracks latest 10 user-agent interactions
+🔁 Conversation History	Tracks the latest 10 user-agent interactions
 🎨 Dual-Mode Parity	Same functionalities accessible via UI or AI chat
 🚀 Lightweight & Self-Hosted	No external AI API; runs fully with minimal dependencies
-📦 Tech Stack
+📦 TECH STACK
 
 Backend: Python 3 + FastAPI
 
-Frontend: Static index.html served by FastAPI root endpoint
+Frontend: Static index.html served via FastAPI
 
 AI Agent Logic: Custom fallback pattern matching
 
@@ -34,36 +36,35 @@ Deployment: Hosted on Render
 
 CORS: Enabled for cross-origin frontend-backend communication
 
-🛠 Usage
-🌐 Live Demo
+🌐 LIVE DEMO
 
-Try the app here: https://to-do-list-7e75.onrender.com/
+Try it here: Click to Open
 
-💬 Supported Commands
+💬 SUPPORTED COMMANDS
 
-Add task
+Add Task
 
 add buy groceries
 create task read book
 
 
-Complete task
+Complete Task
 
 mark task 2 done
 complete task 1
 
 
-Delete completed tasks
+Delete Completed Tasks
 
 delete all done tasks
 
 
-List tasks
+List Tasks
 
 list my tasks
 show tasks
 
-🚀 Setup & Run Locally
+🚀 SETUP & RUN LOCALLY
 git clone https://github.com/yourusername/yourrepo.git
 cd yourrepo
 python -m venv venv
