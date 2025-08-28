@@ -21,14 +21,14 @@
     <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-yellow" />
   </a>
 </p>
----
+
 
 <p align="center">
   <em>A lightweight to-do list with AI-powered agent interface using fallback pattern matching.<br />
   Dual-mode interaction with full parity: manual UI and natural language commands.</em>
 </p>
 
----
+
 
 ## ✨ Overview
 
@@ -40,7 +40,7 @@ Users can manage tasks by:
 - Natural language commands sent to an AI agent powered by fallback regex matching (no external LLMs required)  
 - Viewing conversation history to maintain context
 
----
+
 
 ## 🛠️ Features
 
@@ -67,7 +67,7 @@ Users can manage tasks by:
 
 All commands are also available via manual UI controls.
 
----
+
 
 ## 💻 Local Setup
 python -m venv venv
@@ -85,4 +85,4 @@ Open [http://localhost:8000](http://localhost:8000) in your browser
 
 Released under the [MIT License](https://opensource.org/licenses/MIT).
 
----
+
