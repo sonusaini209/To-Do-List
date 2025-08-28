@@ -67,9 +67,6 @@ All commands are also available via manual UI controls.
 ---
 
 ## 💻 Local Setup
-
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
 python -m venv venv
 source venv/bin/activate # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -79,55 +76,12 @@ text
 
 Open [http://localhost:8000](http://localhost:8000) in your browser.
 
----
 
-## 📂 Project Structure
 
-yourrepo/
-├── main.py # Backend API & AI agent logic
-├── index.html # Frontend UI served at '/'
-├── requirements.txt # Python dependencies
-├── render.yaml # Render deployment config (optional)
-└── README.md # This file
-
-text
-
----
-
-## 🔮 Future Improvements
-
-- Integrate full LLM support (OpenAI, Hugging Face, LangChain) for advanced conversational AI  
-- Add voice input/output with Whisper, Web Speech API, or Azure Speech Services  
-- Persist tasks and chat history with MongoDB or vector databases (Weaviate, Pinecone)  
-- Enhance UI using React, Vue, or similar frameworks  
-- Develop clean prompt chains with contextual memory for better user experience
-
----
-
-## 🙌 Acknowledgments
-
-Special thanks to the **Foyr AI** team for the inspiring hackathon opportunity to explore agentic interfaces and AI-native software design.
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!  
-Feel free to check [issues page](https://github.com/yourusername/yourrepo/issues) to contribute.
-
----
+-
 
 ## 📄 License
 
 Released under the [MIT License](https://opensource.org/licenses/MIT).
 
 ---
-
-*This README was crafted with 💙 for the Foyr AI Hackathon 2025.*
-
----
-
-<p align="center">
-  <a href="https://twitter.com/yourTwitterHandle">Follow me on Twitter</a> &nbsp;|&nbsp;
-  <a href="https://github.com/yourusername">GitHub Profile</a>
-</p>
