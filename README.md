@@ -1,72 +1,68 @@
-To-Do List with AI Agent — Foyr AI Hackathon 2025
-Live Demo
+🚀 To-Do List with AI Agent — Foyr AI Hackathon 2025
+Python| 💻 Repo
 
-Overview
-This project is a to-do list manager enhanced with a lightweight AI agent interface that understands natural language commands via fallback pattern matching (rule-based) to manage tasks.
+🎯 Project Overview
+A to-do list manager enhanced with an AI-powered agent interface that processes natural language commands through fallback pattern matching—no external AI API needed.
 
-Built for the Foyr AI Hackathon 2025, the app demonstrates an agent-friendly, dual-mode interface where users can interact either:
+Built for the Foyr AI Hackathon 2025, this app highlights a dual-mode interaction:
 
-Manually via the UI for adding, completing, and deleting tasks
+Manual task control via intuitive UI
 
-Intelligently via natural language chat commands processed by the AI agent backend
+Intelligent control via a natural language AI agent
 
-Features
-Task management: Add, complete, list, and clear tasks manually or via chat commands.
+All actions are fully accessible in both modes for seamless user experience.
 
-AI agent: Processes simple natural language commands using fallback regex (no external LLM needed).
-
-Dual mode parity: All actions achievable manually or through agent commands.
-
-Conversation tracking: Maintains last 10 chat interactions for context and continuity.
-
-Lightweight & self-contained: No external AI API dependencies, suitable for local or cloud deployment.
-
-Tech Stack
+✨ Features
+Feature	Description
+✅ Task Management	Add, complete, delete, and list tasks manually or via AI commands
+🤖 Simple AI Agent	Understands commands via regex-based natural language fallback
+🔁 Conversation History	Tracks latest 10 user-agent interactions
+🎨 Dual-Mode Parity	Same functionalities accessible via UI or AI chat
+🚀 Lightweight & Self-Hosted	No external AI API; runs fully with minimal dependencies
+📦 Tech Stack
 Backend: Python 3 + FastAPI
 
 Frontend: Static index.html served by FastAPI root endpoint
 
-AI Agent Logic: Custom fallback pattern matching with Python re
+AI Agent Logic: Custom fallback pattern matching
 
-Deployment: Hosted on Render (visit demo)
+Deployment: Hosted on Render
 
 CORS: Enabled for cross-origin frontend-backend communication
 
-Usage
-You can interact with the app either by:
+🛠 Usage
+Live Demo
+Try the app here: https://to-do-list-7e75.onrender.com/
 
-Using the UI in the live demo or your local deployment.
+Commands Supported
+Add task:
 
-Sending chat commands (post requests to /agent) with commands like:
+"add buy groceries"
 
-add buy milk
+"create task read book"
 
-mark task 2 done
+Complete task:
 
-delete all done tasks
+"mark task 2 done"
 
-list tasks
+"complete task 1"
 
-The backend will interpret these commands and perform corresponding task actions.
+Delete completed tasks:
 
-Installation & Setup (Local)
+"delete all done tasks"
+
+List tasks:
+
+"list my tasks"
+
+"show tasks"
+
+🚀 Setup & Run Locally
 bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/yourusername/yourrepo.git
+cd yourrepo
 python -m venv venv
-# Activate venv (Linux/Mac)
-source venv/bin/activate
-# Activate venv (Windows)
-venv\Scripts\activate
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload
-Visit http://localhost:8000 in your browser to interact with the app.
-
-Project Structure
-main.py - FastAPI application including API routes for tasks and AI agent commands.
-
-index.html - Frontend UI served at the root endpoint.
-
-requirements.txt - Python dependencies.
-
-render.yaml - Render deployment configuration (if applicable).
+Open browser at http://localhost:8000 to start using the app.
